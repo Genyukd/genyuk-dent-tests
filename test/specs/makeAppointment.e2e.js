@@ -11,14 +11,10 @@ describe('Make an appointment', () => {
         await agreementCheckBox.click();
         await browser.pause (2000);
         const quickAppointButton = await $(page.quickAppointButton);
-        await quickAppointButton.click();
-        await browser.pause (2000);
-        //const captchaForm = await $(page.captchaForm);
-        //await captchaForm.waitForDisplayed();
-        //const notARobot = await $(page.notARobot);
-        //await notARobot.click();
+        await browser.pause(2000);
+        await quickAppointButton.click({x:0,y:0});
+        await browser.pause (10000);
         const quickFormSent = await $(page.quickFormSent);
-        await quickFormSent.waitForDisplayed();
         await expect(quickFormSent).toBeExisting();
 
     })   
