@@ -17,9 +17,9 @@ exports.config = {
           args: ['headless', 'disable-gpu']}
     }, */{
         browserName: 'firefox',
-        'moz:firefoxOptions': {
+        /*'moz:firefoxOptions': {
           args: ['-headless']
-        }
+        }*/
     }],
 
     // Level of logging verbosity: trace | debug | info | warn | error | silent
@@ -29,7 +29,7 @@ exports.config = {
     waitforTimeout: 10000,
     connectionRetryTimeout: 120000,
     connectionRetryCount: 3,
-    services: ['firefox-profile', 'intercept'],
+    services: ['intercept'],
     framework: 'mocha',
     reporters: ['spec'],
     mochaOpts: {

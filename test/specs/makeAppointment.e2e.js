@@ -6,111 +6,72 @@ describe('Make an appointment', () => {
         await browser.url(`/`)
         const phoneNumber = helper.getPhoneNumber("+7");
         await page.fillNameAndPhone('Тест', phoneNumber);
-        await browser.pause (2000);
         const agreementCheckBox = await $(page.agreementCheckBox);
         await agreementCheckBox.click();
-        await browser.pause (2000);
         const quickAppointButton = await $(page.quickAppointButton);
-        await browser.pause(2000);
-        await quickAppointButton.click({x:0,y:0});
-        await browser.pause (10000);
+        await quickAppointButton.scrollIntoView();
+        await quickAppointButton.click({x:0, y:0});
         const quickFormSent = await $(page.quickFormSent);
         await expect(quickFormSent).toBeExisting();
+        await browser.reloadSession();
 
-    })   
-
- /*   it('should choose supportive plan', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.chooseSupportivePlan();
-        })
-
-    it('should fill in the phone number', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        const phoneNumber = helper.getPhoneNumber("+1");
-        await page.submitPhoneNumber(phoneNumber);
-        await expect(await helper.getElementByText(phoneNumber)).toBeExisting();
-    })
-
-    it('should add a credit card', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        const cardNumber = helper.getCardNumber();
-        const cardCode = helper.getCardCode();
-        await page.fillCardNumber(cardNumber, cardCode);
-    })
-
-   it('should write a message to the driver', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.writeMessage('Bring me a pint of beer!');
-    })
-
-    it('should order a blanket and handkerchiefs', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.chooseSupportivePlan();
-        await page.orderBlanketAndHandkerchiefs();
-    })
-
-    it('should order 2 ice creams', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.chooseSupportivePlan();
-        await page.orderTwoIceCreams();
-    })
-
-    it('should check that the car search modal appears', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.chooseSupportivePlan();
-        const phoneNumber = helper.getPhoneNumber("+1");
-        await page.submitPhoneNumber(phoneNumber);
-        await expect(await helper.getElementByText(phoneNumber)).toBeExisting();
-        const cardNumber = helper.getCardNumber();
-        const cardCode = helper.getCardCode();
-        await page.fillCardNumber(cardNumber, cardCode);
-        await page.writeMessage('Bring me a pint of beer!');
-        await page.orderBlanketAndHandkerchiefs();
-        await page.orderTwoIceCreams();
-        await page.orderTaxi();
-    })    
-
-    it('should check for the driver info to appear', async () => {
-        await browser.url(`/`)
-        await browser.deleteCookies();
-        await browser.execute('localStorage.clear()');
-        await page.fillAddresses('East 2nd Street, 601', '1300 1st St');
-        await page.chooseSupportivePlan();
-        const phoneNumber = helper.getPhoneNumber("+1");
-        await page.submitPhoneNumber(phoneNumber);
-        await expect(await helper.getElementByText(phoneNumber)).toBeExisting();
-        const cardNumber = helper.getCardNumber();
-        const cardCode = helper.getCardCode();
-        await page.fillCardNumber(cardNumber, cardCode);
-        await page.writeMessage('Bring me a pint of beer!');
-        await page.orderBlanketAndHandkerchiefs();
-        await page.orderTwoIceCreams();
-        await page.orderTaxi();
-        await browser.pause (35000);
-        const driverArriving = await $(page.driverArriving).getText();
-        const appear = await expect(driverArriving).toContain('The driver will arrive');
     })  
-*/
+}),
+
+describe('Leave a feedback', () => {
+    it('should write a feedback', async () => {
+        await browser.url(`/`)
+        await browser.newWindow('https://genyuk-dent.ru/opinion');
+        await browser.url('https://genyuk-dent.ru/opinion');
+        const leaveFeedback = await $(page.leaveFeedback);
+        leaveFeedback.click();
+        const sendFeedback = await $(page.sendFeedback);
+        sendFeedback.scrollIntoView();
+        await sendFeedback.click(); //actual feedback cannot be tested, as the input form is abscent
+        const feedbackApproval = await $(page.feedbackApproval);
+        await feedbackApproval.waitForDisplayed();
+        expect(feedbackApproval).toBeExisting();
+
+    })
+}),
+
+describe('Make an online appointment', () => {
+    it('should make an online appointment', async () => {
+        await browser.url(`/`)
+        await browser.newWindow('https://genyuk-dent.ru/online');
+        await browser.url('https://genyuk-dent.ru/online');
+        const treatmentSelector = await $(page.treatmentSelector);
+        treatmentSelector.click();
+        const implantSelector = await $(page.implantSelector);
+        await implantSelector.waitForDisplayed();
+        implantSelector.click();
+        await browser.keys('Tab');
+        const phoneNumberField = await $(page.phoneNumberField);
+        const phoneNumber = helper.getPhoneNumber("+7");
+        phoneNumberField.setValue(phoneNumber);
+        const nameUser = await $(page.nameUser);
+        nameUser.setValue("Тест");
+        const purposeSelector = await $(page.purposeSelector);
+        purposeSelector.click();
+        const advertWeb = await $(page.advertWeb);
+        advertWeb.click();
+        const commentsField = await $(page.commentsField);
+        commentsField.setValue("Привет, это автотест на WebDriverIO!");
+        const appointmentCheckBox = await $(page.appointmentCheckBox);
+        appointmentCheckBox.scrollIntoView();
+        appointmentCheckBox.click();
+        await expect(implantSelector).toBeSelected();
+        await expect(phoneNumberField).toHaveValue(phoneNumber);
+        await expect(nameUser).toHaveValue("Тест");
+        await expect(advertWeb).toBeSelected();
+        await expect(commentsField).toHaveValue("Привет, это автотест на WebDriverIO!");
+        await expect(appointmentCheckBox).toBeSelected();
+        const submitButton = await $(page.submitButton);
+        submitButton.click();
+        const notARobotMessage = await $(page.notARobotMessage);
+        notARobotMessage.waitForDisplayed();
+        await expect(notARobotMessage).toBeExisting();
+    })
 })
 
+   
