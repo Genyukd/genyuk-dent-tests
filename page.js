@@ -1,6 +1,6 @@
 module.exports = {
     // Inputs
-    //nameField: '.ihkpbf1df_0',
+    //nameField: '.mosaic-form__text mosaic-form__text--u-ihkpbf1df',
     nameField: '//*[@id="ihkpbf1df_0"]',
     //phoneField: '.i',
     phoneField: '//*[@id="i3x2o6ob0_0"]',
@@ -50,6 +50,7 @@ module.exports = {
     // Functions
     fillNameAndPhone: async function(name, phoneNumber) {
         const nameField = await $(this.nameField);
+        await nameField.waitForDisplayed();
         await nameField.setValue(name);
         const phoneField = await $(this.phoneField);
         await phoneField.setValue(phoneNumber);
